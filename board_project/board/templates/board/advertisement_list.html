@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Объявления</h1>
+{% if user.is_authenticated %}
+    <a href="{% url 'board:add_advertisement' %}"><button>Добавить объявление</button></a>
+{% endif %}
+<br>  <br>
+<table>
+  {% for advertisement in advertisements %}
+    <tr class="align_left">
+      <th>
+        <a href="{% url 'board:advertisement_detail' pk=advertisement.pk %}">{{ advertisement.title }}</a>
+      </th>
+      <th> {{ advertisement.author }} </th>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ advertisement.title }}</h1>
+<p>{{ advertisement.content }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="edit_adv" value="{{advertisement.pk}}">
+        Редактировать
+    </button>
+</form>
+{% endblock %}

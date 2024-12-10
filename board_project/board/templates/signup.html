@@ -1,0 +1,14 @@
+<!-- your_app/templates/signup.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Регистрация</h2>
+<form method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <br>
+    <button type="submit">Регистрация</button>
+</form>
+{% endblock %}

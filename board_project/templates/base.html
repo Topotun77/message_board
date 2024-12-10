@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Доска объявлений{% endblock %}</title>
+    {% if not day_team %}
+      <link rel="stylesheet" type="text/css" href='{% static "board_project/style-day.css" %}'>
+    {% else %}
+      <link rel="stylesheet" type="text/css" href='{% static "board_project/style-night.css" %}'>
+    {% endif %}
+    <link rel="icon" href="{% static 'favicon3.ico' %}" />
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'home' %}">Домой</a>
+        <a href="{% url 'board:advertisement_list' %}">Доска объявлений</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Выход</a>
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a>
+            <a href="{% url 'signup' %}">Регистрация</a>
+        {% endif %}
+        <a href="?day={{day_team}}">
+            {% if not day_team %}
+              <img src="{% static 'board_project/day.png' %}" width="40">
+            {% else %}
+              <img src="{% static 'board_project/night.png' %}" width="40">
+            {% endif %}
+        </a>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>
