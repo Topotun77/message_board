@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 
 class AdvertisementForm(forms.ModelForm):
+    """
+    Форма для объявлений
+    """
     title = forms.CharField(label='Заголовок объявления:', max_length=200)
     content = forms.CharField(label='Текст объявления:', widget=forms.Textarea)
 
@@ -14,9 +17,12 @@ class AdvertisementForm(forms.ModelForm):
 
 
 class SignUpForm(UserCreationForm):
+    """
+    Форма для регистрации пользователей
+    """
     username = forms.CharField(label='Имя пользователя:')
-    password1 = forms.CharField(label='Введите пароль:')
-    password2 = forms.CharField(label='Повторите пароль:')
+    password1 = forms.CharField(label='Введите пароль:', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Повторите пароль:', widget=forms.PasswordInput)
 
     class Meta:
         model = User

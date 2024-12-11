@@ -1,6 +1,6 @@
 .navbar {
             overflow: hidden;
-            background-color: #bbb;
+            background-color: #ccc;
             padding: 14px 16px;
         }
         .navbar a {
@@ -19,12 +19,13 @@
 body {
     background-color: #ffffff;
     font-family: 'Roboto', sans-serif;
+    color: #333;
     background: url("day_fon.jpg");
     background-attachment: fixed;
 }
 
-a:link {color: #999;}
-a:visited {color: #552;}
+a:link {color: #655;}
+a:visited {color: #887;}
 a:hover {color: #bbb;}
 a:active {color: #663;}
 
@@ -129,11 +130,16 @@ table {
     border: 1px solid #eee;
     border-collapse: separate;
     border-spacing: 0px;
+    color: #655;
 }
 
-tr, th {
+tr, th, td {
     border: 1px solid #eee;
-    padding: 0.1em 1em;
+    padding: 0.2em 1em;
+}
+
+.no_border {
+    border: 0px;
 }
 
 .blue-text {
@@ -156,6 +162,13 @@ button {
     color: #663;
     border: 2px solid #663;
     border-radius: 0.5em;
+}
+
+button:hover {
+  background-color: rgb(255, 255, 255, 0.2);
+  color: #999;
+  border: 2px solid #888;
+  text-shadow: 2px 2px 4px rgba(250, 250, 250, 0.5);
 }
 
 h1 {
@@ -185,4 +198,9 @@ h2 {
 h3 {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
+}
+
+label {
+    font-size: 0.9em;
+    color: #876;
 }

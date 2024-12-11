@@ -3,10 +3,24 @@
 {% block content %}
 <h1>{{ advertisement.title }}</h1>
 <p>{{ advertisement.content }}</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" name="edit_adv" value="{{advertisement.pk}}">
-        Редактировать
-    </button>
-</form>
+<table class="no_border"><tr class="no_border"><th class="no_border">
+    <form method="post" action="{% url 'board:edit_advertisement' pk=advertisement.pk %}">
+        {% csrf_token %}
+        <button type="submit" name="edit_adv" value="{{advertisement.pk}}">
+            Редактировать
+        </button>
+    </form>
+    </th><th class="no_border">
+    <form method="post" action="{% url 'board:del_advertisement' pk=advertisement.pk %}">
+        {% csrf_token %}
+        <button onclick="return confirm('Вы уверены, что хотите удалить это объявление?');"
+                type="submit" name="del_adv" value="{{advertisement.pk}}">
+            Удалить
+        </button>
+    </form>
+    </th></tr>
+</table>
+{% if error %}
+    <p class="red-text">{{ error }}</p>
+{% endif %}
 {% endblock %}

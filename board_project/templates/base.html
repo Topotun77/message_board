@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Доска объявлений{% endblock %}</title>
-    {% if not day_team %}
+    {% if user_pref.theme != 'dark' %}
       <link rel="stylesheet" type="text/css" href='{% static "board_project/style-day.css" %}'>
     {% else %}
       <link rel="stylesheet" type="text/css" href='{% static "board_project/style-night.css" %}'>
@@ -21,8 +21,8 @@
             <a href="{% url 'login' %}">Вход</a>
             <a href="{% url 'signup' %}">Регистрация</a>
         {% endif %}
-        <a href="?day={{day_team}}">
-            {% if not day_team %}
+        <a href="?day=theme">
+            {% if user_pref.theme != 'dark' %}
               <img src="{% static 'board_project/day.png' %}" width="40">
             {% else %}
               <img src="{% static 'board_project/night.png' %}" width="40">
