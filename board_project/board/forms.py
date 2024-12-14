@@ -9,12 +9,12 @@ class AdvertisementForm(forms.ModelForm):
     Форма для объявлений
     """
     title = forms.CharField(label='Заголовок объявления:', max_length=200)
-    content = forms.CharField(label='Текст объявления:', widget=forms.Textarea)
+    content = forms.CharField(label='Текст объявления:', widget=forms.Textarea, empty_value='')
+    image = forms.ImageField(label='Изображение:', help_text='Загрузите картинку при необходимости.')
 
     class Meta:
         model = Advertisement
-        fields = ['title', 'content']
-
+        fields = ['title', 'content', 'image']
 
 class SignUpForm(UserCreationForm):
     """

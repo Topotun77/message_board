@@ -3,6 +3,11 @@
 {% block content %}
 <h1>{{ advertisement.title }}</h1>
 <p>{{ advertisement.content }}</p>
+{% if advertisement.image %}
+<a href="{{ advertisement.image.url }}" target="_blank">
+    <img src="{{ advertisement.image.url }}" alt="Original Image" style="height: 300px;">
+</a>
+{% endif %}
 <table class="no_border"><tr class="no_border"><th class="no_border">
     <form method="post" action="{% url 'board:edit_advertisement' pk=advertisement.pk %}">
         {% csrf_token %}

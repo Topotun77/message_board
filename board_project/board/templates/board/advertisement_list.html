@@ -12,6 +12,13 @@
       <th>
         <a href="{% url 'board:advertisement_detail' pk=advertisement.pk %}">{{ advertisement.title }}</a>
       </th>
+      <th>
+        {% if advertisement.image %}
+          <a href="{{ advertisement.image.url }}" target="_blank">
+            <img src="{{ advertisement.image.url }}" alt="Original Image" style="height: 30px;">
+          </a>
+        {% endif %}
+      </th>
       <th> {{ advertisement.author }} </th>
     </tr>
   {% endfor %}

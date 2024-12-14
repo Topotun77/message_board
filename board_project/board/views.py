@@ -74,7 +74,7 @@ def add_advertisement(request: HttpRequest) -> HttpResponseRedirect:
     :return: После добавления объявления, возвращаемся к списку объявлений.
     """
     if request.method == "POST":
-        form = AdvertisementForm(request.POST)
+        form = AdvertisementForm(request.POST, request.FILES)
         if form.is_valid():
             advertisement = form.save(commit=False)
             advertisement.author = request.user
@@ -99,7 +99,7 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
         return render(request, 'board/advertisement_detail.html',
                       {'advertisement': advertisement, 'error': 'Вы не можете редактировать чужие объявления!'})
     if request.method == "POST" and request.POST.get('add_adv'):
-        form = AdvertisementForm(request.POST, instance=advertisement)
+        form = AdvertisementForm(request.POST, request.FILES, instance=advertisement)
         if form.is_valid():
             advertisement = form.save(commit=False)
             advertisement.author = request.user

@@ -13,7 +13,7 @@
         }
         .navbar a:hover {
             background-color: #111;
-            color: #68f;
+            color: #876;
         }
 
 body {
@@ -22,16 +22,18 @@ body {
     font-family: 'Roboto', sans-serif;
     background-image: url("black_fon.jpg");
     background-attachment: fixed;
-    color: #68f
+    color: #876
 }
 
 input, textarea {
     background-color: RGB(255, 255, 255, 0.1);
-    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    color: #ba9;
     font-size: 1.1em;
 }
 
 input[type='checkbox'] {
+  font-family: 'Roboto', sans-serif;
   width: 20px;
   height: 20px;
   background-color: #6080f3;
@@ -79,10 +81,10 @@ input[type='checkbox']:checked {
   outline: none;
 }
 
-a:link {color: #5050f3;}
-a:visited {color: #6080f3;}
-a:hover {color: #4040e0;}
-a:active {color: #6080ff;}
+a:link {color: #876;}
+a:visited {color: #ba9;}
+a:hover {color: #653;}
+a:active {color: #ba9;}
 
 aside {
   width: 30%;
@@ -149,7 +151,7 @@ table {
     border: 1px solid #222;
     border-collapse: separate;
     border-spacing: 0px;
-    color: #55f;
+    color: #876;
 }
 
 td, tr, th {
@@ -179,23 +181,23 @@ button {
     background-color: transparent;
     font-size: 0.9em;
     text-transform: uppercase;
-    color: #6080f3;
-    border: 2px solid #6080f3;
+    color: #876;
+    border: 2px solid #876;
     border-radius: 0.5em;
     box-shadow: 0px 0px 10px rgba(179, 147, 211, 0.5);
 }
 
 button:hover {
-  color: #44e;
-  border: 2px solid #55f;
+  color: #653;
+  border: 2px solid #764;
 }
 
 h1 {
     text-align: left;
     font-family: 'Roboto', sans-serif;
     text-transform: uppercase;
-    text-shadow: 5px 8px 4px rgba(150, 150, 150, 0.4);
-    background-image: linear-gradient(to right ,#55f, #44c, #55f);
+    text-shadow: 5px 8px 4px rgba(150, 150, 150, 0.3);
+    background-image: linear-gradient(to right ,#876, #653, #876);
     font-size: 30px;
     background-size: 250px;
     background-repeat: repeat;
@@ -209,10 +211,6 @@ h2 {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     text-shadow: 0px 0px 15px rgba(20, 20, 20, 1),
-                 0px 0px 15px rgba(20, 20, 20, 1),
-                 0px 0px 15px rgba(20, 20, 20, 1),
-                 0px 0px 15px rgba(20, 20, 20, 1),
-                 0px 0px 15px rgba(20, 20, 20, 1);
     color: #46d
 }
 
