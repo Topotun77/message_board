@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>
+    {% if title2 %}
+      {{ title2 }}
+    {% else %}
+      Добавить комментарий к объявлению
+    {% endif %}
+  </h2>
+  <hr>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <hr>
+    <button type="submit" name="add_adv" value="{{advertisement.pk}}">Готово!</button>
+  </form>
+{% endblock %}

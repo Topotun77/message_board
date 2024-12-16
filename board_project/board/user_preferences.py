@@ -12,12 +12,14 @@ def pref(request: HttpRequest):
     if request.user.is_authenticated:
         _preferences = Preferences.objects.filter(user=request.user).last()
         if request.GET.get('day') == 'theme':
-            if _preferences.theme is None:
+            if not _preferences or _preferences.theme is None:
                 Preferences.objects.create(user=request.user, theme='dark')
             elif _preferences.theme == 'light':
-                Preferences.objects.update(user=request.user, theme='dark')
+                _preferences.theme = 'dark'
+                _preferences.save()
             else:
-                Preferences.objects.update(user=request.user, theme='light')
+                _preferences.theme = 'light'
+                _preferences.save()
             _preferences = Preferences.objects.filter(user=request.user).last()
     else:
         _preferences = None

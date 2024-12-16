@@ -3,6 +3,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def user_directory_path(instance, filename):
+    """
+    Выбор директории загрузки в зависимости от id пользователя
+    """
+    try:
+        file = f'images/user_{instance.author.id}/{filename}'
+    except:
+        file = f'images/user_{instance.user.id}/{filename}'
+    return file
+
+
 class Advertisement(models.Model):
     """
     Модель таблица Объявления
@@ -11,10 +22,26 @@ class Advertisement(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='images/', null=False)
+    image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Объявления'
+        verbose_name_plural = 'Объявления'
 
     def __str__(self):
         return self.title
+
+
+class Image(models.Model):
+    """
+    Модель таблицы изображений
+    """
+    advertisement = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=user_directory_path, verbose_name='Файл', blank=True, null=True)
+
+    def __str__(self):
+        return self.image.name
 
 
 class Comment(models.Model):
@@ -26,8 +53,12 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Комментарии'
+        verbose_name_plural = 'Комментарии'
     def __str__(self):
         return f'Comment by {self.author} on {self.advertisement}'
+
 
 class Preferences(models.Model):
     """
@@ -45,5 +76,5 @@ class Preferences(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user'], name='One Entry Per User')
+            models.UniqueConstraint(fields=['user'], name='Одна запись на пользователя')
         ]

@@ -16,7 +16,7 @@
         <a href="{% url 'home' %}">Домой</a>
         <a href="{% url 'board:advertisement_list' %}">Доска объявлений</a>
         {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Выход</a>
+        <a href="{% url 'logout' %}">Выход (<span class="small_font">{{user}}</span>)</a>
         {% else %}
             <a href="{% url 'login' %}">Вход</a>
             <a href="{% url 'signup' %}">Регистрация</a>
@@ -33,5 +33,9 @@
     {% block content %}
     {% endblock %}
 
+<br>  <hr>
+    © HIT (Home Information Technology)
+    <br> Пишите нам на почту: ✉<a href="mailto:mail@mail.ru"> mail@mail.ru </a>
+    <br>  <br>
 </body>
 </html>

@@ -119,7 +119,7 @@ aside {
 }
 
 thead, tfoot {
-  background-color: #e0e8f2;
+  background-color: rgb(200, 200, 200, 0.3);
 }
 
 tbody {
@@ -198,6 +198,7 @@ h2 {
 h3 {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
+    color: #653;
 }
 
 label {

@@ -2,12 +2,25 @@
 
 {% block content %}
 <h1>{{ advertisement.title }}</h1>
+<h3>Автор:
+    <a href="{% url 'board:advertisement_list' pk=advertisement.author.id %}">
+        {{ advertisement.author.username }}
+    </a></h3>
 <p>{{ advertisement.content }}</p>
 {% if advertisement.image %}
 <a href="{{ advertisement.image.url }}" target="_blank">
-    <img src="{{ advertisement.image.url }}" alt="Original Image" style="height: 300px;">
+  <img src="{{ advertisement.image.url }}" style="height: 300px;">
 </a>
 {% endif %}
+{% if images %}
+  {% for i in images %}
+    <a href="{{ i.image.url }}" target="_blank">
+      <img src="{{ i.image.url }}" style="height: 300px;">
+    </a>
+  {% endfor %}
+{% endif %}
+
+{% if advertisement.author == user or user.is_superuser %}
 <table class="no_border"><tr class="no_border"><th class="no_border">
     <form method="post" action="{% url 'board:edit_advertisement' pk=advertisement.pk %}">
         {% csrf_token %}
@@ -25,7 +38,35 @@
     </form>
     </th></tr>
 </table>
+{% endif %}
 {% if error %}
     <p class="red-text">{{ error }}</p>
 {% endif %}
+<br> <hr>
+<h2>Комментарии:</h2>
+{% if user.is_authenticated %}
+    <a href="{% url 'board:add_comment' pk=advertisement.pk %}"><button>Добавить комментарий</button></a>
+{% endif %}
+ <br> <br>
+{% if comments %}
+    <table>
+      <thead>
+        <tr>
+          <th>Содержание комментария</th>
+          <th>Автор</th>
+        </tr>
+      </thead>
+      {% for comment in comments %}
+        <tr class="align_left">
+          <th>
+            <div class="small_font">{{ comment.content }}</div>
+          </th>
+          <th>
+            <a href="{% url 'board:advertisement_list' pk=comment.author.id %}">{{ comment.author }}</a>
+          </th>
+        </tr>
+      {% endfor %}
+    </table>
+{% endif %}
+
 {% endblock %}

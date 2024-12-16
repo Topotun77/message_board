@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect
-from .models import Advertisement
-from .forms import AdvertisementForm
+from .models import Advertisement, Image, Comment
+from .forms import AdvertisementForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
@@ -45,14 +46,24 @@ def home(request: HttpRequest) -> HttpResponseRedirect:
     return render(request, 'home.html')
 
 
-def advertisement_list(request: HttpRequest) -> HttpResponseRedirect:
+def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpResponseRedirect:
     """
     Представление - Просмотр списка объявлений.
     :param request: HttpRequest - запрос пользователя.
+    :param pk: id объявления.
     :return: Остаемся на странице.
     """
-    advertisements = Advertisement.objects.all()
-    return render(request, 'board/advertisement_list.html', {'advertisements': advertisements})
+    context = {}
+    if pk:
+        advertisements = Advertisement.objects.filter(author=pk)
+        context = {'user_show': User.objects.get(id=pk)}
+    else:
+        advertisements = Advertisement.objects.all()
+    images = []
+    for adv in advertisements:
+        images.append(Image.objects.filter(advertisement=adv.id))
+    context = {**context, 'advertisements': zip(advertisements, images)}
+    return render(request, 'board/advertisement_list.html', context)
 
 
 def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
@@ -63,7 +74,10 @@ def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     :return: В случае нажатия кнопки Редактировать - переходим на страницу редактирования объявления.
     """
     advertisement = Advertisement.objects.get(pk=pk)
-    return render(request, 'board/advertisement_detail.html', {'advertisement': advertisement})
+    images = Image.objects.filter(advertisement=advertisement.id)
+    comments = Comment.objects.filter(advertisement=advertisement.id)
+    return render(request, 'board/advertisement_detail.html',
+                  {'advertisement': advertisement, 'images': images, 'comments': comments})
 
 
 @login_required
@@ -86,6 +100,27 @@ def add_advertisement(request: HttpRequest) -> HttpResponseRedirect:
 
 
 @login_required
+def add_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+    """
+    Представление - Добавить новый комментарий.
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id объявления.
+    :return: После добавления комментария, возвращаемся к деталям объявления.
+    """
+    if request.method == "POST":
+        form = CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.advertisement = Advertisement.objects.get(id=pk)
+            comment.save()
+            return redirect('board:advertisement_detail', pk=pk)
+    else:
+        form = CommentForm()
+    return render(request, 'board/add_comment.html', {'form': form})
+
+
+@login_required
 def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     """
     Представление - Редактирование выбранного объявления. Редактировать можно только
@@ -95,14 +130,13 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     :return: После редактирования возвращаемся на страницу просмотра деталей выбранного объявления.
     """
     advertisement = Advertisement.objects.get(pk=pk)
-    if request.user != advertisement.author:
+    if request.user != advertisement.author and not request.user.is_superuser:
         return render(request, 'board/advertisement_detail.html',
                       {'advertisement': advertisement, 'error': 'Вы не можете редактировать чужие объявления!'})
     if request.method == "POST" and request.POST.get('add_adv'):
         form = AdvertisementForm(request.POST, request.FILES, instance=advertisement)
         if form.is_valid():
             advertisement = form.save(commit=False)
-            advertisement.author = request.user
             advertisement.save()
             return redirect('board:advertisement_detail', pk=pk)
     else:
