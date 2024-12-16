@@ -16,18 +16,18 @@
         <a href="{% url 'home' %}">Домой</a>
         <a href="{% url 'board:advertisement_list' %}">Доска объявлений</a>
         {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Выход (<span class="small_font">{{user}}</span>)</a>
+            <a href="{% url 'logout' %}">Выход (<span class="small_font">{{user}}</span>)</a>
+            <a href="?day=theme" title="Светлая/темная тема">
+                {% if user_pref.theme != 'dark' %}
+                  <img src="{% static 'board_project/day.png' %}" width="34">
+                {% else %}
+                  <img src="{% static 'board_project/night.png' %}" width="34">
+                {% endif %}
+            </a>
         {% else %}
             <a href="{% url 'login' %}">Вход</a>
             <a href="{% url 'signup' %}">Регистрация</a>
         {% endif %}
-        <a href="?day=theme">
-            {% if user_pref.theme != 'dark' %}
-              <img src="{% static 'board_project/day.png' %}" width="40">
-            {% else %}
-              <img src="{% static 'board_project/night.png' %}" width="40">
-            {% endif %}
-        </a>
     </div>
 
     {% block content %}

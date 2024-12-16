@@ -1,15 +1,15 @@
 .navbar {
             overflow: hidden;
             background-color: #333;
-            padding: 14px 16px;
+            padding: 8px 10px;
         }
         .navbar a {
             float: left;
             color: #f2f2f2;
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             text-decoration: none;
-            font-size: 17px;
+            font-size: 18px;
         }
         .navbar a:hover {
             background-color: #111;
@@ -45,6 +45,12 @@ input[type='checkbox']:checked {
   width: 20px;
   height: 20px;
   background-color: #6080f3;
+}
+
+hr {
+  height: 2px;
+  background-color: RGB(128, 112, 96, 0.3);
+  border: none;
 }
 
 .container {
