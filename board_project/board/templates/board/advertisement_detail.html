@@ -8,17 +8,36 @@
     </a></h3>
 <p>{{ advertisement.content }}</p>
 {% if advertisement.image %}
-<a href="{{ advertisement.image.url }}" target="_blank">
+<a class="a_img" href="{{ advertisement.image.url }}" target="_blank">
   <img src="{{ advertisement.image.url }}" style="height: 300px;">
 </a>
 {% endif %}
 {% if images %}
   {% for i in images %}
-    <a href="{{ i.image.url }}" target="_blank">
+    <a class="a_img" href="{{ i.image.url }}" target="_blank">
       <img src="{{ i.image.url }}" style="height: 300px;">
     </a>
   {% endfor %}
 {% endif %}
+<br>
+
+<a class="a_img" href="{% url 'board:like_dislike' pk=advertisement.pk tp=1 %}">
+  {% if like %}
+    <img src="/static/board_project/like_on.png" width="40">
+  {% else %}
+    <img src="/static/board_project/like.png" width="40">
+  {% endif %}
+</a>
+{{ advertisement.like_count }} &ensp;&ensp;
+<a class="a_img" href="{% url 'board:like_dislike' pk=advertisement.pk tp=0 %}">
+  {% if dislike %}
+    <img src="/static/board_project/dislike_on.png" width="40">
+  {% else %}
+    <img src="/static/board_project/dislike.png" width="40">
+  {% endif %}
+</a>
+{{ advertisement.dislike_count }}
+<br>  <br>
 
 {% if advertisement.author == user or user.is_superuser %}
 <table class="no_border"><tr class="no_border"><th class="no_border">
@@ -39,6 +58,7 @@
     </th></tr>
 </table>
 {% endif %}
+
 {% if error %}
     <p class="red-text">{{ error }}</p>
 {% endif %}

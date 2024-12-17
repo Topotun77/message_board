@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect
-from .models import Advertisement, Image, Comment
+from .models import Advertisement, Image, Comment, Like
 from .forms import AdvertisementForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -8,6 +8,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from .forms import SignUpForm
 from django.contrib.auth import login
+from .utilite import like_read, like_set
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
@@ -76,8 +77,12 @@ def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     advertisement = Advertisement.objects.get(pk=pk)
     images = Image.objects.filter(advertisement=advertisement.id)
     comments = Comment.objects.filter(advertisement=advertisement.id)
+    context = like_read(request, pk)
     return render(request, 'board/advertisement_detail.html',
-                  {'advertisement': advertisement, 'images': images, 'comments': comments})
+                  {'advertisement': advertisement,
+                   'images': images,
+                   'comments': comments,
+                   **context})
 
 
 @login_required
@@ -146,7 +151,7 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
 
 
 @login_required
-def del_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
+def del_advertisement(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     """
     Представление - Удаление выбранного объявления. Удалять можно только свои объявления.
     :param request: HttpRequest - запрос пользователя.
@@ -163,3 +168,15 @@ def del_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     return render(request, 'board/advertisement_detail.html',
                       {'advertisement': advertisement})
 
+
+@login_required
+def like_dislike(request: HttpRequest, pk: int, tp: int):
+    """
+    Поставить лайк/дизлайк объявлению.
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id объявления.
+    :param tp: Тип лйка.
+    :return: Посл записи лайка/дизлайка возвращаемся к странице с деталями объявления
+    """
+    like_set(request, pk=pk, tp=tp)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -24,13 +24,13 @@
       </th>
       <th>
         {% if advertisement.image %}
-          <a href="{{ advertisement.image.url }}" target="_blank">
+          <a class="a_img" href="{{ advertisement.image.url }}" target="_blank">
             <img src="{{ advertisement.image.url }}" style="height: 30px;">
           </a>
         {% endif %}
         {% if images %}
           {% for img in images %}
-            <a href="{{ img.image.url }}" target="_blank">
+            <a class="a_img" href="{{ img.image.url }}" target="_blank">
               <img src="{{ img.image.url }}" style="height: 30px;">
             </a>
           {% endfor %}

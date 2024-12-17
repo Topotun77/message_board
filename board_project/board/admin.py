@@ -1,18 +1,19 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Advertisement, Comment, Preferences, Image
+from .models import Advertisement, Comment, Preferences, Image, Like
 
 # admin.site.register(Advertisement)
 admin.site.register(Comment)
 admin.site.register(Preferences)
 admin.site.register(Image)
+admin.site.register(Like)
 
 
 @admin.register(Advertisement)
 class AdvertisementAdmin(admin.ModelAdmin):
     readonly_fields = ['preview']
-    list_display = ('title', 'content', 'author', 'image', 'created_at')
+    list_display = ('title', 'content', 'author', 'image', 'like_count', 'dislike_count', 'created_at')
     fieldsets = (
         ('Description', {
             'fields': ('title',
@@ -20,7 +21,8 @@ class AdvertisementAdmin(admin.ModelAdmin):
                        'author')
         }),
         ('Parameters', {
-            'fields': (('image', 'preview'),)
+            'fields': (('like_count', 'dislike_count'),
+                       ('image', 'preview'),)
         })
     )
     search_fields = ('title', 'content', 'author')

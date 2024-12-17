@@ -53,6 +53,11 @@ hr {
   border: none;
 }
 
+.a_img {
+  text-decoration: none;
+  border: none;
+}
+
 .container {
   display: flex;
   flex-direction: column;

@@ -15,13 +15,13 @@ def user_directory_path(instance, filename):
 
 
 class Advertisement(models.Model):
-    """
-    Модель таблица Объявления
-    """
+    """  Модель таблица Объявления  """
     title = models.CharField(max_length=255)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    like_count = models.IntegerField(default=0)
+    dislike_count = models.IntegerField(default=0)
     image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 
     class Meta:
@@ -33,21 +33,21 @@ class Advertisement(models.Model):
 
 
 class Image(models.Model):
-    """
-    Модель таблицы изображений
-    """
+    """  Модель таблицы изображений  """
     advertisement = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=user_directory_path, verbose_name='Файл', blank=True, null=True)
+    image = models.ImageField(upload_to=user_directory_path, verbose_name='File', blank=True, null=True)
 
     def __str__(self):
         return self.image.name
 
+    class Meta:
+        verbose_name = 'Изображения'
+        verbose_name_plural = 'Изображения'
+
 
 class Comment(models.Model):
-    """
-    Модель таблицы комментариев к объявлениям
-    """
+    """  Модель таблицы комментариев к объявлениям  """
     advertisement = models.ForeignKey(Advertisement, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
@@ -56,14 +56,33 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
+
     def __str__(self):
-        return f'Comment by {self.author} on {self.advertisement}'
+        return f'Комментарий от {self.author} на объявление "{self.advertisement}"'
+
+
+class Like(models.Model):
+    """  Модель лайков/дизлайков пользователей  """
+    like_types = (
+        (0, 'DisLike'),
+        (1, 'Like'),
+    )
+
+    advertisement = models.ForeignKey(Advertisement, related_name='likes', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    like_type = models.IntegerField(choices=like_types, default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Лайки-дизлайки'
+        verbose_name_plural = 'Лайки-дизлайки'
+
+    def __str__(self):
+        return f'Объявление "{self.advertisement}", {self.get_like_type_display()} от {self.user}'
 
 
 class Preferences(models.Model):
-    """
-    Модель таблицы пользовательских настроек
-    """
+    """  Модель таблицы пользовательских настроек  """
     themes = (
         ('light', 'Light Theme'),
         ('dark', 'Dark Theme'),
