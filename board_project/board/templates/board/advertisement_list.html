@@ -11,7 +11,7 @@
 <table>
   <thead>
     <tr>
-      <th>Объявление</th>
+      <th>Объявления</th>
       <th>Фото</th>
       <th>Автор</th>
     </tr>
@@ -19,6 +19,7 @@
   {% for advertisement, images in advertisements %}
     <tr class="align_left">
       <th>
+        <div class="date_font small_font">{{ advertisement.created_at }}</div>
         <a href="{% url 'board:advertisement_detail' pk=advertisement.pk %}">{{ advertisement.title }}</a>
         <div class="small_font">{{ advertisement.content|truncatechars:50 }}</div>
       </th>

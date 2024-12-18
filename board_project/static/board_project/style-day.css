@@ -109,6 +109,11 @@ aside {
     display: inline-block;
 }
 
+.date_font {
+    color: #aaa;
+    font-family: 'Roboto', sans-serif;
+}
+
 .small_font {
     font-size: 0.8em;
     font-family: 'Roboto', sans-serif;

@@ -1,0 +1,6 @@
+.venv
+.idea
+Lib
+Scripts
+__pycache__
+config.py

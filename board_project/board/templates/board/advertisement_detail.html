@@ -5,7 +5,7 @@
 <h3>Автор:
     <a href="{% url 'board:advertisement_list' pk=advertisement.author.id %}">
         {{ advertisement.author.username }}
-    </a></h3>
+    </a> &ensp;&ensp;&ensp;&ensp; <span  class="date_font"> {{ advertisement.created_at }} </span></h3>
 <p>{{ advertisement.content }}</p>
 {% if advertisement.image %}
 <a class="a_img" href="{{ advertisement.image.url }}" target="_blank">
@@ -40,22 +40,35 @@
 <br>  <br>
 
 {% if advertisement.author == user or user.is_superuser %}
-<table class="no_border"><tr class="no_border"><th class="no_border">
-    <form method="post" action="{% url 'board:edit_advertisement' pk=advertisement.pk %}">
+<table class="no_border">
+  <tr class="no_border">
+      <th class="no_border">
+      <form method="post" action="{% url 'board:edit_advertisement' pk=advertisement.pk %}">
         {% csrf_token %}
         <button type="submit" name="edit_adv" value="{{advertisement.pk}}">
             Редактировать
         </button>
-    </form>
-    </th><th class="no_border">
-    <form method="post" action="{% url 'board:del_advertisement' pk=advertisement.pk %}">
+      </form>
+      </th>
+      <th class="no_border">
+      <form method="post" action="{% url 'board:del_advertisement' pk=advertisement.pk %}">
         {% csrf_token %}
         <button onclick="return confirm('Вы уверены, что хотите удалить это объявление?');"
                 type="submit" name="del_adv" value="{{advertisement.pk}}">
             Удалить
         </button>
-    </form>
-    </th></tr>
+      </form>
+      </th>
+      <th class="no_border">
+      <form method="post" action="{% url 'board:image_generation' pk=advertisement.pk %}">
+        {% csrf_token %}
+        <button onclick="return confirm('Вы уверены, что хотите сгенерировать изображение по запросу: {{ advertisement.title }} {{ advertisement.content }}?');"
+                type="submit" name="gen_image" value="{{advertisement.pk}}">
+            Сгенерировать картинку
+        </button>
+      </form>
+      </th>
+  </tr>
 </table>
 {% endif %}
 
@@ -79,7 +92,8 @@
       {% for comment in comments %}
         <tr class="align_left">
           <th>
-            <div class="small_font">{{ comment.content }}</div>
+            <div class="date_font small_font">{{ comment.created_at }}</div>
+            <div>{{ comment.content }}</div>
           </th>
           <th>
             <a href="{% url 'board:advertisement_list' pk=comment.author.id %}">{{ comment.author }}</a>

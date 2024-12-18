@@ -6,7 +6,7 @@ It exposes the WSGI callable as a module-level variable named ``application``.
 For more information on this file, see
 https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
 """
-
+import logging
 import os
 
 from django.core.wsgi import get_wsgi_application
@@ -14,3 +14,8 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'board_project.settings')
 
 application = get_wsgi_application()
+
+logging.basicConfig(
+        filename='board_message.log', filemode='a', encoding='utf-8',
+        format='%(asctime)s | %(levelname)s | %(name)s | %(message)s',
+        level=logging.INFO)

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>
+    Добавить изображение к объявлению
+  </h2>
+  <hr>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <hr>
+    <button type="submit" name="add_adv" value="{{advertisement.pk}}">Готово!</button>
+  </form>
+{% endblock %}

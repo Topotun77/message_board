@@ -75,6 +75,7 @@ def like_set(request: HttpRequest, pk: int, tp: int):
     return
 
 
+@decor_log
 def kandinsky_query(text: str = 'пустота', dir_='./', file_='image.jpg') -> str:
     """
     Отправка и обработка запроса на генерацию картинки Kandinsky 3.0
@@ -89,10 +90,8 @@ def kandinsky_query(text: str = 'пустота', dir_='./', file_='image.jpg') 
         os.mkdir(dir_)
     except FileExistsError:
         print('exist')
-        # file_name = await kandinsky.gen(text.replace("\n", " "), dir_)  #TODO асинхронность
     try:
         file_name = asyncio.run(gen(text.replace("\n", " "), dirr=dir_, file_name=file_))
-
     except Exception as err:
-        file_name_cut = f'Error: {err.args}'
-    return
+        file_name = f'Error: {err.args}'
+    return file_name

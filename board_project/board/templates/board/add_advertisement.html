@@ -14,7 +14,41 @@
     <table>
       {{ form.as_table }}
     </table>
-    <hr>
     <button type="submit" name="add_adv" value="{{advertisement.pk}}">Готово!</button>
   </form>
+
+<hr>
+
+    <h2>Дополнительные картинки</h2>
+  {% if title2 %}
+
+    <a href="{% url 'board:add_image' pk=advertisement.pk %}"><button>Добавить картинки</button></a>
+    <br> <br>
+  {% endif %}
+
+    {% if images %}
+      <form method="post" id="myForm">
+        {% csrf_token %}
+        <nav>
+        {% for itm in images %}
+        <div class="container inline-block">
+          <input type="checkbox" id="chb" name="i{{ itm.id }}" value="i{{ itm.id }}">
+          <label for="chb">
+            <a class="a_img" href="{{ itm.image.url }}" target="_blank">
+              <img src="{{ itm.image.url }}"
+                   title="{{ itm.url }} &#10Автор: {{ itm.user }}"
+                   style="width: 300px; height: 300px;">
+            </a>
+          </label>
+
+        </div>
+        {% endfor %}
+        </nav>
+        <p class="align_left">
+          <button onclick="return confirm('Удалить выбранные картинки?');" type="submit" name="image_del" value="checked">
+            Удалить выбранные
+          </button>
+        </p>
+      </form>
+  {% endif %}
 {% endblock %}

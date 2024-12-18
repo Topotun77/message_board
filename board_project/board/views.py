@@ -1,14 +1,22 @@
+import os
+import shutil
+import time
+from datetime import datetime
+# from multiprocessing import Process
+from threading import Thread
+
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from .models import Advertisement, Image, Comment, Like
-from .forms import AdvertisementForm, CommentForm
+from .forms import AdvertisementForm, CommentForm, ImageForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 from django.shortcuts import render, redirect
 from .forms import SignUpForm
 from django.contrib.auth import login
-from .utilite import like_read, like_set
+from .utilite import like_read, like_set, kandinsky_query
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
@@ -18,7 +26,7 @@ def logout_view(request: HttpRequest) -> HttpResponseRedirect:
     :return: HttpResponseRedirect - перенаправление на домашнюю страницу
     """
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 
 def signup(request: HttpRequest) -> HttpResponseRedirect:
@@ -126,6 +134,27 @@ def add_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 
 
 @login_required
+def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+    """
+    Представление - Добавить Новую картинку.
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id объявления.
+    :return: После добавления комментария, возвращаемся к редактированию объявления.
+    """
+    if request.method == "POST":
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = request.user
+            image.advertisement = Advertisement.objects.get(id=pk)
+            image.save()
+            return redirect('board:edit_advertisement', pk=pk)
+    else:
+        form = ImageForm()
+    return render(request, 'board/add_image.html', {'form': form})
+
+
+@login_required
 def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     """
     Представление - Редактирование выбранного объявления. Редактировать можно только
@@ -135,6 +164,7 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     :return: После редактирования возвращаемся на страницу просмотра деталей выбранного объявления.
     """
     advertisement = Advertisement.objects.get(pk=pk)
+    images = Image.objects.filter(advertisement=advertisement)
     if request.user != advertisement.author and not request.user.is_superuser:
         return render(request, 'board/advertisement_detail.html',
                       {'advertisement': advertisement, 'error': 'Вы не можете редактировать чужие объявления!'})
@@ -144,10 +174,51 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
             advertisement = form.save(commit=False)
             advertisement.save()
             return redirect('board:advertisement_detail', pk=pk)
+    elif request.method == "POST" and request.POST.get('image_del'):
+        for img in images:
+            image = request.POST.get(f'i{img.id}')
+            if image:
+                Image.objects.get(id=img.id).delete()
+        form = AdvertisementForm(instance=advertisement)
+        images = Image.objects.filter(advertisement=advertisement)
+    # elif request.method == "POST" and request.POST.get('add_image'):
+    #     return render(request, 'board/add_advertisement.html',
+    #                   {'form': form,
+    #                    'title2': 'Редактировать объявление',
+    #                    'advertisement': advertisement,
+    #                    'images': images})
     else:
         form = AdvertisementForm(instance=advertisement)
     return render(request, 'board/add_advertisement.html',
-                  {'form': form, 'title2': 'Редактировать объявление', 'advertisement': advertisement})
+                  {'form': form,
+                   'title2': 'Редактировать объявление',
+                   'advertisement': advertisement,
+                   'images': images})
+
+
+@login_required
+def image_generation(request: HttpRequest, pk) -> HttpResponse:
+    """
+    Представление - Генерация изображения с помощью API Kandinski 3.0
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id объявления.
+    :return: После редактирования возвращаемся на страницу просмотра деталей выбранного объявления.
+    """
+    advertisement = Advertisement.objects.get(pk=pk)
+    file_name = f"img_{time.time_ns()}.jpg"
+    for i in '?!:;,*$№#%@"~`()[]{}<>':
+        file_name = file_name.replace(i, '')
+    dir_ = os.path.join(settings.MEDIA_ROOT, f'images/kandinsky/{datetime.now().year}_{datetime.now().month}').replace("\\", "/")
+    file = os.path.join(dir_, file_name).replace("\\", "/")
+    file_name_cut = '/'.join(file.split('/')[-4:])
+
+    Image.objects.create(advertisement=advertisement, user=request.user, image=file_name_cut)
+    shutil.copy(os.path.join(settings.MEDIA_ROOT, 'gen.jpg'), dir_)
+    os.rename(os.path.join(dir_, 'gen.jpg'), file)
+    proc = Thread(target=kandinsky_query, args=(f'{advertisement.title} {advertisement.content}', dir_, file_name))
+    proc.start()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

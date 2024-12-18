@@ -1,6 +1,13 @@
 """Django's command-line utility for administrative tasks."""
+import logging
 import os
 import sys
+
+
+logging.basicConfig(
+        filename='board_message.log', filemode='a', encoding='utf-8',
+        format='%(asctime)s | %(levelname)s | %(name)s | %(message)s',
+        level=logging.INFO)
 
 
 def main():

@@ -36,10 +36,10 @@ class Image(models.Model):
     """  Модель таблицы изображений  """
     advertisement = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=user_directory_path, verbose_name='File', blank=True, null=True)
+    image = models.ImageField(upload_to=user_directory_path)
 
     def __str__(self):
-        return self.image.name
+        return f'Картинка к объявлению {self.advertisement}. Файл {self.image.name}.'
 
     class Meta:
         verbose_name = 'Изображения'

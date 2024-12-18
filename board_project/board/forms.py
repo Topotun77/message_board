@@ -12,19 +12,12 @@ class AdvertisementForm(forms.ModelForm):
     """
     title = forms.CharField(label='Заголовок объявления:', max_length=200)
     content = forms.CharField(label='Текст объявления:', widget=forms.Textarea, empty_value='')
-    # images = forms.FileField(label='Изображения:',
-    #                          widget=forms.ClearableFileInput(attrs={'multiple': True}),
-    #                          help_text='Загрузите картинки при необходимости.',
-    #                          required=False)
     image = forms.ImageField(label='Изображение:', help_text='Загрузите картинку при необходимости.', required=False)
 
     class Meta:
         model = Advertisement
-        readonly_fields = ['preview']
         fields = ['title', 'content', 'image']
 
-        def preview(self, obj):
-            return mark_safe(f"<img src='{obj.image.url}' height='300'>")
 
 class CommentForm(forms.ModelForm):
     """
@@ -41,12 +34,11 @@ class ImageForm(forms.ModelForm):
     """
     Форма для загрузки картинок
     """
-    image_path = forms.ImageField(label='Изображение:', help_text='Загрузите картинку при необходимости.',
-                                  required=False)
+    image = forms.ImageField(label='Изображение:')
 
     class Meta:
         model = Image
-        fields = ['image_path']
+        fields = ['image']
 
 
 class SignUpForm(UserCreationForm):
