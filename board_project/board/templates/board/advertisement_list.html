@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Объявления</h1>
-{% if user_show %} <h2>Все объявления пользователя: {{ user_show }}</h2>
+{% if user_show %} <h2>Все объявления пользователя: {{ user_show }} ({{ user_stat.advertisement_count }})</h2>
 {% endif %}
 {% if user.is_authenticated %}
     <a href="{% url 'board:add_advertisement' %}"><button>Добавить объявление</button></a>

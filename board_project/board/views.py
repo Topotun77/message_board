@@ -8,8 +8,8 @@ from threading import Thread
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
-from .models import Advertisement, Image, Comment, Like
-from .forms import AdvertisementForm, CommentForm, ImageForm
+from .models import Advertisement, Image, Comment, Like, UserStat
+from .forms import AdvertisementForm, CommentForm, ImageForm2
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
@@ -65,7 +65,9 @@ def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpRespo
     context = {}
     if pk:
         advertisements = Advertisement.objects.filter(author=pk)
-        context = {'user_show': User.objects.get(id=pk)}
+        user_stat_ = UserStat.objects.get(user=pk)
+        context = {'user_show': User.objects.get(id=pk),
+                   'user_stat': user_stat_}
     else:
         advertisements = Advertisement.objects.all()
     images = []
@@ -136,22 +138,27 @@ def add_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 @login_required
 def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     """
-    Представление - Добавить Новую картинку.
+    Представление - Добавить новые картинки.
     :param request: HttpRequest - запрос пользователя.
     :param pk: id объявления.
-    :return: После добавления комментария, возвращаемся к редактированию объявления.
+    :return: После добавления картинок, возвращаемся к редактированию объявления.
     """
+    advertisement = Advertisement.objects.get(id=pk)
     if request.method == "POST":
-        form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.user = request.user
-            image.advertisement = Advertisement.objects.get(id=pk)
-            image.save()
-            return redirect('board:edit_advertisement', pk=pk)
+        uploaded_images = request.FILES.getlist('photo')
+        for image in uploaded_images:
+            Image.objects.create(advertisement=advertisement, user=request.user, image=image)
+        # form = ImageForm2(request.POST, request.FILES)
+        # if form.is_valid():
+        #     image = form.save(commit=False)
+        #     image.user = request.user
+        #     image.advertisement = advertisement
+        #     image.save()
+        return redirect('board:edit_advertisement', pk=pk)
     else:
-        form = ImageForm()
-    return render(request, 'board/add_image.html', {'form': form})
+        form = ImageForm2()
+    return render(request, 'board/add_image.html',
+                  {'form': form, 'advertisement': advertisement})
 
 
 @login_required
@@ -181,12 +188,6 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
                 Image.objects.get(id=img.id).delete()
         form = AdvertisementForm(instance=advertisement)
         images = Image.objects.filter(advertisement=advertisement)
-    # elif request.method == "POST" and request.POST.get('add_image'):
-    #     return render(request, 'board/add_advertisement.html',
-    #                   {'form': form,
-    #                    'title2': 'Редактировать объявление',
-    #                    'advertisement': advertisement,
-    #                    'images': images})
     else:
         form = AdvertisementForm(instance=advertisement)
     return render(request, 'board/add_advertisement.html',

@@ -2,9 +2,10 @@
 
 {% block content %}
   <h2>
-    Добавить изображение к объявлению
+    Добавить изображение к объявлению:
   </h2>
-  <hr>
+<h3 class="big_font">{{ advertisement.title }}</h3>
+<hr>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table>

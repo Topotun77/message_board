@@ -81,6 +81,24 @@ class Like(models.Model):
         return f'Объявление "{self.advertisement}", {self.get_like_type_display()} от {self.user}'
 
 
+class UserStat(models.Model):
+    """  Модель статистики по пользователям  """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    advertisement_count = models.IntegerField(default=0)
+    like_count = models.IntegerField(default=0)
+    dislike_count = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Статистика'
+        verbose_name_plural = 'Статистика'
+
+    def __str__(self):
+        return (f'Пользователь {self.user}: '
+                f'сообщений {self.advertisement_count}, '
+                f'лайков {self.like_count}, '
+                f'дизлайков {self.dislike_count}')
+
+
 class Preferences(models.Model):
     """  Модель таблицы пользовательских настроек  """
     themes = (
@@ -89,7 +107,7 @@ class Preferences(models.Model):
     )
 
     preference_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
 
     theme = models.CharField(max_length=255, choices=themes)
 
