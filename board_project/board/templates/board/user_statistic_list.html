@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Статистика по пользователям</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Пользователь</th>
+      <th>Количество сообщений</th>
+      <th>Количество комментариев</th>
+      <th>Количество лайков</th>
+      <th>Количество дизлайков</th>
+    </tr>
+  </thead>
+  {% for user in user_stat %}
+    <tr class="align_left">
+      <th>
+        <a href="{% url 'board:advertisement_list' pk=user.user.id %}">
+          {{ user.user.username }}
+        </a>
+      </th>
+      <th>
+        {{ user.advertisement_count }}
+      </th>
+      <th>
+        {{ user.comment_count }}
+      </th>
+      <th>
+        {{ user.like_count }}
+      </th>
+      <th>
+        {{ user.dislike_count }}
+      </th>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

@@ -9,8 +9,9 @@ import time
 
 import os
 
-API_KEY = 'XXX'
-SECRET_KEY = 'XXX'
+API_KEY = os.environ.get("API_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 class Text2ImageAPI:
 
@@ -22,11 +23,24 @@ class Text2ImageAPI:
         }
 
     def get_model(self):
+        """
+        Запрос данных API-модели
+        :return: id API-модели
+        """
         response = requests.get(self.URL + 'key/api/v1/models', headers=self.AUTH_HEADERS)
         data = response.json()
         return data[0]['id']
 
-    def generate(self, prompt, model, images=1, width=1024, height=1024):
+    def generate(self, prompt: str, model, images=1, width=1024, height=1024):
+        """
+        Отправка запроса на генерацию
+        :param prompt: Строка запроса для генерации изображения
+        :param model: id API-модели
+        :param images: Количество запрашиваемых картинок
+        :param width: Ширина картинки
+        :param height: Высота картинки
+        :return: id запроса для дальнейшего отслеживания
+        """
         params = {
             "type": "GENERATE",
             "numImages": images,
@@ -46,6 +60,12 @@ class Text2ImageAPI:
         return data['uuid']
 
     async def check_generation(self, request_id, attempts=10, delay=10):
+        """
+        Проверка и ожидание готовности генерации
+        :param request_id: id запроса
+        :param attempts: Количество попыток проверки
+        :param delay: Задержка времени между попытками
+        """
         while attempts > 0:
             response = requests.get(self.URL + 'key/api/v1/text2image/status/' + request_id, headers=self.AUTH_HEADERS)
             data = response.json()
@@ -58,8 +78,14 @@ class Text2ImageAPI:
             await asyncio.sleep(delay)
 
 
-async def gen(prom, dirr="image", file_name=f"img_{time.time_ns()}.jpg"):
-    """  """
+async def gen(prom: str, dirr="image", file_name=f"img_{time.time_ns()}.jpg") -> str:
+    """
+    Генерация картинки через API Kandinsky
+    :param prom: Строка запроса для генерации изображения
+    :param dirr: Директория для сохранения сгенерированной картинки
+    :param file_name: Имя файла сгенерированной картинки
+    :return: Полное имя файла, куда была сохранена картинка
+    """
     api = Text2ImageAPI('https://api-key.fusionbrain.ai/', API_KEY, SECRET_KEY)
     # api2 =
     model_id = api.get_model()
@@ -86,6 +112,7 @@ async def gen(prom, dirr="image", file_name=f"img_{time.time_ns()}.jpg"):
             with open(f"{dirr}/{file_name}", "wb") as file:
                 file.write(image_data)
     return f"{dirr}/{file_name}"
+
 
 if __name__ == '__main__':
     while 1:

@@ -1,0 +1,57 @@
+<form method="get" action="{% url 'board:advertisement_list' %}" id="paginator">
+<nav aria-label="Панель навигации">
+  <ul>
+    {% if advertisements_feeds.has_other_pages %}
+      {% if advertisements_feeds.has_previous %}
+        <li class="inline-block">
+          <a href="?page={{ advertisements_feeds.previous_page_number }}" aria-label="Предыдущая страница">
+            <span class="padding_font"> << </span>
+          </a>
+        </li>
+      {% else %}
+        <li class="inline-block"><span  class="padding_font"> << </span></li>
+      {% endif %}
+
+      {% for i in advertisements_feeds.paginator.page_range %}
+        {% if advertisements_feeds.number == i %}
+          <li class="inline-block">
+            <span class="big_font padding_font"><b>{{ i }}</b></span>
+          </li>
+        {% else %}
+          <li class="inline-block">
+            <a href="?page={{ i }}">
+              <span class="padding_font">{{ i }}</span>
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if advertisements_feeds.has_next %}
+        <li class="inline-block">
+          <a href="?page={{ advertisements_feeds.next_page_number }}" aria-label="Следующая страница">
+            <span class="padding_font"> >> </span>
+          </a>
+        </li>
+      {% else %}
+        <li class="inline-block"><span class="padding_font"> >> </span></li>
+      {% endif %}
+    {% if user.is_authenticated %}
+      <b class="padding_font inline-block">|</b>
+    {% endif %}
+    {% endif %}
+    {% if user.is_authenticated %}
+    <span class="padding_font inline-block">Объявлений:</span>
+      <select id="cnt" name="cnt"
+              onchange="document.getElementById('paginator').submit();">
+        <option value="0"></option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="30">30</option>
+        <option value="90">90</option>
+        <option value="150">150</option>
+      </select>
+    {% endif %}
+  </ul>
+</nav>
+</form>

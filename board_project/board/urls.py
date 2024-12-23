@@ -7,6 +7,8 @@ app_name = 'board'
 
 urlpatterns = [
     path('', views.advertisement_list, name='advertisement_list'),
+    path('stat/', views.user_stat_list, name='user_stat_list'),
+    path('settings/', views.user_settings, name='user_settings'),
     path('<int:pk>/', views.advertisement_list, name='advertisement_list'),
     path('advertisement/<int:pk>/', views.advertisement_detail, name='advertisement_detail'),
     path('edit/<int:pk>/', views.edit_advertisement, name='edit_advertisement'),

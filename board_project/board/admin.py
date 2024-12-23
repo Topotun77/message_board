@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Advertisement, Comment, Preferences, Image, Like
+from .models import Advertisement, Comment, Preferences, Image, Like, UserStat
 
 # admin.site.register(Advertisement)
 admin.site.register(Comment)
 admin.site.register(Preferences)
 admin.site.register(Image)
 admin.site.register(Like)
+admin.site.register(UserStat)
 
 
 @admin.register(Advertisement)

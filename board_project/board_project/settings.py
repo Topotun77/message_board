@@ -24,9 +24,12 @@ SECRET_KEY = 'django-insecure-4jp%3#371)jh1tpx*3ouo(go_7)*f86jc-qkwoa$=ot-0+)dcc
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['messageboard-topotun77.amvera.io', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://messageboard-topotun77.amvera.io']
 
 # Application definition
 
@@ -132,3 +135,5 @@ LOGIN_REDIRECT_URL = '/board'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+PAGE_DEFAULT = 10

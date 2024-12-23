@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.safestring import mark_safe
 
-from .models import Advertisement, Image, Comment
+from .models import Advertisement, Image, Comment, Preferences
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -30,17 +30,6 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
 
 
-class ImageForm(forms.ModelForm):
-    """
-    Форма для загрузки картинок
-    """
-    image = forms.ImageField(label='Изображение:')
-
-    class Meta:
-        model = Image
-        fields = ['image']
-
-
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
@@ -59,7 +48,7 @@ class MultipleFileField(forms.FileField):
         return result
 
 
-class ImageForm2(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     """
     Форма для загрузки картинок 2
     """
@@ -82,3 +71,16 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'password1', 'password2',)
+
+
+class PreferencesForm(forms.ModelForm):
+    """
+    Форма для предпочтений пользователя
+    """
+    # user = forms.CharField(label='Ник пользователя:')
+    theme = forms.CharField(label='Тема (светлая/темная):', widget=forms.Select(choices=Preferences.themes))
+    page_num = forms.IntegerField(label='Количество объявлений на страницу:')
+
+    class Meta:
+        model = Preferences
+        fields = ['theme', 'page_num']

@@ -1,9 +1,11 @@
 import asyncio
 import logging
 import os
+
+from django.conf import settings
 from django.http import HttpRequest
 
-from .models import Like, Advertisement
+from .models import Like, Advertisement, Preferences
 from .kandinsky import gen
 
 
@@ -73,6 +75,29 @@ def like_set(request: HttpRequest, pk: int, tp: int):
                     advertisement.like_count = int(advertisement.like_count) - 1
             advertisement.save()
     return
+
+
+def read_pade_count(request: HttpRequest) -> int:
+    """
+    Определить количество объявлений на страницу для пагинации учитывая предпочтения пользователя.
+    :param request: HttpRequest - запрос пользователя.
+    :return: Количество объявлений на страницу.
+    """
+    cnt = request.GET.get('cnt')
+    if not request.user.is_authenticated:
+        cnt = settings.PAGE_DEFAULT
+    elif cnt is None or int(cnt) == 0:
+        try:
+            cnt = Preferences.objects.get(user=request.user).page_num
+        except:
+            cnt = settings.PAGE_DEFAULT
+            Preferences.objects.create(user=request.user, page_num=cnt)
+    else:
+        try:
+            Preferences.objects.filter(user=request.user).update(page_num=cnt)
+        except Exception as er:
+            logging.error(f'Ошибка: {er}')
+    return cnt
 
 
 @decor_log

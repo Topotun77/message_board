@@ -83,10 +83,11 @@ class Like(models.Model):
 
 class UserStat(models.Model):
     """  Модель статистики по пользователям  """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     advertisement_count = models.IntegerField(default=0)
     like_count = models.IntegerField(default=0)
     dislike_count = models.IntegerField(default=0)
+    comment_count = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = 'Статистика'
@@ -95,6 +96,7 @@ class UserStat(models.Model):
     def __str__(self):
         return (f'Пользователь {self.user}: '
                 f'сообщений {self.advertisement_count}, '
+                f'комментариев {self.comment_count}, '
                 f'лайков {self.like_count}, '
                 f'дизлайков {self.dislike_count}')
 
@@ -107,9 +109,10 @@ class Preferences(models.Model):
     )
 
     preference_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    theme = models.CharField(max_length=255, choices=themes)
+    theme = models.CharField(max_length=255, choices=themes, default='light')
+    page_num = models.IntegerField(default=settings.PAGE_DEFAULT)
 
     class Meta:
         constraints = [

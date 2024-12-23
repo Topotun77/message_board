@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import time
@@ -5,18 +6,19 @@ from datetime import datetime
 # from multiprocessing import Process
 from threading import Thread
 
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
-from .models import Advertisement, Image, Comment, Like, UserStat
-from .forms import AdvertisementForm, CommentForm, ImageForm2
+from .models import Advertisement, Image, Comment, Like, UserStat, Preferences
+from .forms import AdvertisementForm, CommentForm, ImageForm, PreferencesForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 from django.shortcuts import render, redirect
 from .forms import SignUpForm
 from django.contrib.auth import login
-from .utilite import like_read, like_set, kandinsky_query
+from .utilite import like_read, like_set, kandinsky_query, read_pade_count
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
@@ -39,6 +41,7 @@ def signup(request: HttpRequest) -> HttpResponseRedirect:
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
+            logging.info(f'Создан пользователь: {user}')
             login(request, user)
             return redirect('/board')
     else:
@@ -55,6 +58,42 @@ def home(request: HttpRequest) -> HttpResponseRedirect:
     return render(request, 'home.html')
 
 
+def user_stat_list(request: HttpRequest) -> HttpResponseRedirect:
+    """
+    Представление - Просмотр статистики по пользователям.
+    :param request: HttpRequest - запрос пользователя.
+    :return: Остаемся на странице.
+    """
+    user_stat = UserStat.objects.all()
+    return render(request, 'board/user_statistic_list.html', {'user_stat': user_stat})
+
+
+def user_settings(request: HttpRequest) -> HttpResponseRedirect:
+    """
+    Изменить пользовательские настройки.
+    :param request: HttpRequest - запрос пользователя.
+    :return: Остаемся на странице.
+    """
+    user_stat = UserStat.objects.all()
+    try:
+        pref = Preferences.objects.get(user=request.user)
+    except BaseException as er:
+        logging.error(f'user_settings: {er}')
+        Preferences.objects.create(user=request.user)
+        pref = Preferences.objects.get(user=request.user)
+    if request.method == "POST":
+        form = PreferencesForm(request.POST, request.FILES, instance=pref)
+        if form.is_valid():
+            user_sett = form.save(commit=False)
+            user_sett.user = request.user
+            user_sett.save()
+            return redirect('board:user_settings')
+    else:
+        form = PreferencesForm(instance=pref)
+    return render(request, 'board/user_settings.html',
+                  {'user_stat': user_stat, 'form': form})
+
+
 def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpResponseRedirect:
     """
     Представление - Просмотр списка объявлений.
@@ -65,15 +104,20 @@ def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpRespo
     context = {}
     if pk:
         advertisements = Advertisement.objects.filter(author=pk)
-        user_stat_ = UserStat.objects.get(user=pk)
-        context = {'user_show': User.objects.get(id=pk),
-                   'user_stat': user_stat_}
+        user_stat_ = UserStat.objects.filter(user=pk)
+        context = {'user_show': User.objects.get(id=pk)}
+        if user_stat_:
+            context['user_stat'] = user_stat_.first()
     else:
         advertisements = Advertisement.objects.all()
+    page_count = read_pade_count(request)
+    paginator = Paginator(advertisements, page_count)
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
     images = []
-    for adv in advertisements:
-        images.append(Image.objects.filter(advertisement=adv.id))
-    context = {**context, 'advertisements': zip(advertisements, images)}
+    for adv in range(len(page_obj)):
+        images.append(Image.objects.filter(advertisement=page_obj[adv].id))
+    context = {**context, 'advertisements': zip(page_obj, images), 'advertisements_feeds': page_obj}
     return render(request, 'board/advertisement_list.html', context)
 
 
@@ -148,15 +192,9 @@ def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
         uploaded_images = request.FILES.getlist('photo')
         for image in uploaded_images:
             Image.objects.create(advertisement=advertisement, user=request.user, image=image)
-        # form = ImageForm2(request.POST, request.FILES)
-        # if form.is_valid():
-        #     image = form.save(commit=False)
-        #     image.user = request.user
-        #     image.advertisement = advertisement
-        #     image.save()
         return redirect('board:edit_advertisement', pk=pk)
     else:
-        form = ImageForm2()
+        form = ImageForm()
     return render(request, 'board/add_image.html',
                   {'form': form, 'advertisement': advertisement})
 

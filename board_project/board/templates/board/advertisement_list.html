@@ -8,6 +8,7 @@
     <a href="{% url 'board:add_advertisement' %}"><button>Добавить объявление</button></a>
     <br> <br>
 {% endif %}
+{% include 'board/paginator.html' %}
 <table>
   <thead>
     <tr>
@@ -45,5 +46,6 @@
     </tr>
   {% endfor %}
 </table>
+{% include 'board/paginator.html' %}
 
 {% endblock %}

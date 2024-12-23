@@ -35,6 +35,13 @@ input[type='checkbox'] {
   background-color: #6080f3;
 }
 
+input, textarea {
+    background-color: RGB(255, 255, 255, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #433;
+    font-size: 0.9em;
+}
+
 hr {
   height: 2px;
   background-color: RGB(128, 112, 96, 0.3);
@@ -120,18 +127,17 @@ aside {
 }
 
 .big_font {
-    font-size: 1.2em;
-    font-family: 'Roboto', sans-serif;
+    font-size: 1.3em;
+    color: #877;
 }
 
 .super_big_font {
     font-size: 1.8em;
-    color: #505050;
     font-family: 'Roboto', sans-serif;
 }
 
 .padding_font {
-    padding: 0em 0.5em
+    padding: 0.5em;
 }
 
 thead, tfoot {
