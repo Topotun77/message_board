@@ -318,8 +318,8 @@ def delete_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     :param pk: id комментария.
     :return: После удаления возвращаемся на страницу списка объявления.
     """
-    commetn = Comment.objects.get(pk=pk)
-    if request.method == "POST" and request.user == commetn.author:
+    comment = Comment.objects.get(pk=pk)
+    if request.user == comment.author:
         Comment.objects.get(id=pk).delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
