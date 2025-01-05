@@ -24,6 +24,12 @@ body {
     background-attachment: fixed;
 }
 
+pre {
+  white-space: pre-wrap;
+  font-size: 1.2em;
+  font-family: 'Roboto', sans-serif;
+}
+
 a:link {color: #655;}
 a:visited {color: #887;}
 a:hover {color: #bbb;}
@@ -118,6 +124,11 @@ aside {
 
 .date_font {
     color: #aaa;
+    font-family: 'Roboto', sans-serif;
+}
+
+.normal_font {
+    font-size: 1em;
     font-family: 'Roboto', sans-serif;
 }
 

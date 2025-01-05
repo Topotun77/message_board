@@ -86,6 +86,8 @@ async def gen(prom: str, dirr="image", file_name=f"img_{time.time_ns()}.jpg") ->
     :param file_name: Имя файла сгенерированной картинки
     :return: Полное имя файла, куда была сохранена картинка
     """
+    prom = ''.join([x for x in prom if 32 <= ord(x) <= 1103])[0:500]
+    print(prom)
     api = Text2ImageAPI('https://api-key.fusionbrain.ai/', API_KEY, SECRET_KEY)
     # api2 =
     model_id = api.get_model()

@@ -6,7 +6,7 @@
     <a href="{% url 'board:advertisement_list' pk=advertisement.author.id %}">
         {{ advertisement.author.username }}
     </a> &ensp;&ensp;&ensp;&ensp; <span  class="date_font"> {{ advertisement.created_at }} </span></h3>
-<p>{{ advertisement.content }}</p>
+<pre>{{ advertisement.content }}</pre>
 {% if advertisement.image %}
 <a class="a_img" href="{{ advertisement.image.url }}" target="_blank">
   <img src="{{ advertisement.image.url }}" style="height: 300px;">
@@ -93,7 +93,18 @@
         <tr class="align_left">
           <th>
             <div class="date_font small_font">{{ comment.created_at }}</div>
-            <div>{{ comment.content }}</div>
+            <pre class="normal_font">{{ comment.content }}</pre>
+            {% if comment.author == user or user.is_superuser %}
+              <div class="date_font small_font">
+                <a href="{% url 'board:edit_comment' pk=comment.id %}">
+                    Редактировать
+                </a> &ensp;&ensp;
+                <a href="{% url 'board:delete_comment' pk=comment.id %}"
+                   onclick="return confirm('Вы уверены, что хотите удалить комментарий');">
+                    Удалить
+                </a>
+              </div>
+            {% endif %}
           </th>
           <th>
             <a href="{% url 'board:advertisement_list' pk=comment.author.id %}">{{ comment.author }}</a>

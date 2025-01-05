@@ -36,7 +36,6 @@ def create_notification_for_partner(sender, instance, created='delete', **kwargs
 def create_notification_for_partner(sender, instance, created='delete', **kwargs):
     if created:
         count_comment = len(sender.objects.filter(author=instance.author))
-        print(count_comment)
         com = UserStat.objects.filter(user=instance.author)
         if com:
             com[0].comment_count = count_comment

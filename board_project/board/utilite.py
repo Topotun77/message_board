@@ -107,14 +107,10 @@ def kandinsky_query(text: str = 'пустота', dir_='./', file_='image.jpg') 
     :param text: текст запроса
     :param dir_: Директория вывода.
     :param file_: Файл вывода.
-    :return: картеж, содержащий имя сформированного файла и текст самого запроса
+    :return: Картеж, содержащий имя сформированного файла и текст самого запроса
     для логирования
     """
 
-    try:
-        os.mkdir(dir_)
-    except FileExistsError:
-        print('exist')
     try:
         file_name = asyncio.run(gen(text.replace("\n", " "), dirr=dir_, file_name=file_))
     except Exception as err:

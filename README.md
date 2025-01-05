@@ -35,30 +35,24 @@
 • Добавлена возможно загрузки нескольких картинок сразу.  
 • Добавлена модель `UserStat` для хранения статистики по пользователю (количество сообщений, лайков и дизлайков).  
 • Реализован подсчет статистики по пользователю через сигналы Django.  
-• **(NEW)** Добавлено поле `comment_count` в модель `Статистика`.  
-• **(NEW)** Добавлен раздел статистики доступный только суперпользователям. Отображает информацию по пользователям (количество сообщений, комментариев, лайков и дизлайков).  
-• **(NEW)** Добавлена документация к модулю `kandinsky`.  
-• **(NEW)** Добавлена пагинация на странице со списком объявлений.  
-• **(NEW)** Добавлено поле `page_num` в модель `Preferences`.  
-• **(NEW)** Добавлено сохранение для каждого пользователя его предпочтений по количеству объявлений на страницу.  
-• **(NEW)** Добавлена возможность изменения и сброса пароля пользователя.  
-• **(NEW)** Приложение размещено на Amvera по адресу: [https://messageboard-topotun77.amvera.io](https://messageboard-topotun77.amvera.io).  
+• Добавлено поле `comment_count` в модель `Статистика`.  
+• Добавлен раздел статистики доступный только суперпользователям. Отображает информацию по пользователям (количество сообщений, комментариев, лайков и дизлайков).  
+• Добавлена документация к модулю `kandinsky`.  
+• Добавлена пагинация на странице со списком объявлений.  
+• Добавлено поле `page_num` в модель `Preferences`.  
+• Добавлено сохранение для каждого пользователя его предпочтений по количеству объявлений на страницу.  
+• Добавлена возможность изменения и сброса пароля пользователя.  
+• Приложение размещено на Amvera по адресу: [https://messageboard-topotun77.amvera.io](https://messageboard-topotun77.amvera.io).  
+• **(NEW)** Добавлено редактирование и удаление комментариев.  
 
-### Статистика по пользователям:
-![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n016.jpg?raw=true)
-### Раздел пользовательских настроек:
-![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n017.jpg?raw=true)
-### Смена пароля:
-![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n018.jpg?raw=true)
-### Восстановление пароля:
-![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n019.jpg?raw=true)
 ### Скриншот страницы со списком объявлений:
 ![img01](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n001.jpg?raw=true)
 ### Список объявлений для выбранного пользователя с указанием количества сообщений:
 ![img01](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n007.jpg?raw=true)
-### Детализация выбранного объявления с лайками/дизлайками:
+### Детализация выбранного объявления с лайками/дизлайками и возможномтью редактировать и удалять комментарии:
 ![img02](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n002.jpg?raw=true)
-![img02](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n005.jpg?raw=true)
+![img02](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n020.jpg?raw=true)
+![img02](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n021.jpg?raw=true)
 ### Картинка в полном размере в новом окне:
 ![img02](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n006.jpg?raw=true)
 ### Редактирование объявления (интерфейс такой же, как и при добавлении нового объявления):
@@ -73,3 +67,11 @@
 ![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n011.jpg?raw=true)
 ### В админ-панели добавлен предварительный просмотр картинки:
 ![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n015.jpg?raw=true)
+### Статистика по пользователям:
+![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n016.jpg?raw=true)
+### Раздел пользовательских настроек:
+![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n017.jpg?raw=true)
+### Смена пароля:
+![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n018.jpg?raw=true)
+### Восстановление пароля:
+![img10](https://github.com/Topotun77/message_board/blob/master/ScreenShots/n019.jpg?raw=true)

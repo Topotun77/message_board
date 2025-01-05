@@ -103,13 +103,13 @@ def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpRespo
     """
     context = {}
     if pk:
-        advertisements = Advertisement.objects.filter(author=pk)
+        advertisements = Advertisement.objects.filter(author=pk).order_by('-id')
         user_stat_ = UserStat.objects.filter(user=pk)
         context = {'user_show': User.objects.get(id=pk)}
         if user_stat_:
             context['user_stat'] = user_stat_.first()
     else:
-        advertisements = Advertisement.objects.all()
+        advertisements = Advertisement.objects.all().order_by('-id')
     page_count = read_pade_count(request)
     paginator = Paginator(advertisements, page_count)
     page_num = request.GET.get('page')
@@ -203,7 +203,7 @@ def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
     """
     Представление - Редактирование выбранного объявления. Редактировать можно только
-    свои объявления.
+    свои объявления или суперпользователю можно редактировать все.
     :param request: HttpRequest - запрос пользователя.
     :param pk: id объявления.
     :return: После редактирования возвращаемся на страницу просмотра деталей выбранного объявления.
@@ -234,6 +234,32 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
                    'advertisement': advertisement,
                    'images': images})
 
+@login_required
+def edit_comment(request: HttpRequest, pk) -> HttpResponseRedirect:
+    """
+    Представление - Редактирование выбранного сомментария. Редактировать можно только
+    свои комментарии или суперпользователю можно редактировать все.
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id комментария.
+    :return: После редактирования возвращаемся на ту же страницу.
+    """
+    comment = Comment.objects.get(pk=pk)
+    # images = Image.objects.filter(advertisement=advertisement)
+    if request.user != comment.author and not request.user.is_superuser:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.method == "POST":
+        form = CommentForm(request.POST, request.FILES, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.save()
+            pk = comment.advertisement.id
+            return redirect('board:advertisement_detail', pk=pk)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'board/add_comment.html',
+                  {'form': form,
+                   'title2': 'Редактировать комментарий'})
+
 
 @login_required
 def image_generation(request: HttpRequest, pk) -> HttpResponse:
@@ -248,6 +274,10 @@ def image_generation(request: HttpRequest, pk) -> HttpResponse:
     for i in '?!:;,*$№#%@"~`()[]{}<>':
         file_name = file_name.replace(i, '')
     dir_ = os.path.join(settings.MEDIA_ROOT, f'images/kandinsky/{datetime.now().year}_{datetime.now().month}').replace("\\", "/")
+    try:
+        os.mkdir(dir_)
+    except FileExistsError:
+        print('exist')
     file = os.path.join(dir_, file_name).replace("\\", "/")
     file_name_cut = '/'.join(file.split('/')[-4:])
 
@@ -277,6 +307,21 @@ def del_advertisement(request: HttpRequest, pk: int) -> HttpResponseRedirect:
         return redirect('board:advertisement_list')
     return render(request, 'board/advertisement_detail.html',
                       {'advertisement': advertisement})
+
+
+@login_required
+def delete_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+    """
+    Представление - Удаление выбранного комментария. Удалять можно только свои объявления
+    или суперпользователю можно все.
+    :param request: HttpRequest - запрос пользователя.
+    :param pk: id комментария.
+    :return: После удаления возвращаемся на страницу списка объявления.
+    """
+    commetn = Comment.objects.get(pk=pk)
+    if request.method == "POST" and request.user == commetn.author:
+        Comment.objects.get(id=pk).delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
