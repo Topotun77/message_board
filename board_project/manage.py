@@ -2,10 +2,11 @@
 import logging
 import os
 import sys
+from board_project.settings import DATA_DIR
 
 
 logging.basicConfig(
-        filename='board_message.log', filemode='a', encoding='utf-8',
+        filename=os.path.join(DATA_DIR, 'board_message.log'), filemode='a', encoding='utf-8',
         format='%(asctime)s | %(levelname)s | %(name)s | %(message)s',
         level=logging.INFO)
 

@@ -1,23 +1,4 @@
-2024-12-18 13:34:50,489 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 13:45:49,607 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\utilite.py changed, reloading.
-2024-12-18 13:45:50,060 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 13:46:55,283 | INFO | root | kandinsky_query: L:/Python/UU-kurs/5_message_board/board_project/media/images/kandinsky/2024_12/img_1734518764703849200.jpg
-2024-12-18 13:54:53,162 | INFO | root | kandinsky_query: L:/Python/UU-kurs/5_message_board/board_project/media/images/kandinsky/2024_12/img_1734519242643962600.jpg
-2024-12-18 14:32:54,565 | INFO | root | kandinsky_query: L:/Python/UU-kurs/5_message_board/board_project/media/images/kandinsky/2024_12/img_1734521524031169000.jpg
-2024-12-18 14:47:23,922 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\views.py changed, reloading.
-2024-12-18 14:47:24,569 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 15:17:36,340 | WARNING | django.request | Not Found: /favicon.ico
-2024-12-18 15:59:27,193 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\views.py changed, reloading.
-2024-12-18 15:59:27,632 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 15:59:55,319 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\views.py changed, reloading.
-2024-12-18 15:59:55,723 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 16:39:02,843 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\views.py changed, reloading.
-2024-12-18 16:39:03,398 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
-2024-12-18 16:40:37,570 | INFO | root | kandinsky_query: L:/Python/UU-kurs/5_message_board/board_project/media/images/kandinsky/2024_12/img_1734529187002919300.jpg
-2024-12-18 16:45:12,976 | INFO | root | kandinsky_query: L:/Python/UU-kurs/5_message_board/board_project/media/images/kandinsky/2024_12/img_1734529462483472900.jpg
-2024-12-18 16:52:48,772 | WARNING | django.security.csrf | Forbidden (CSRF token from POST incorrect.): /board/edit/8/
-2024-12-18 16:53:18,522 | WARNING | django.security.csrf | Forbidden (CSRF token from POST incorrect.): /board/edit/8/
-2024-12-18 16:53:25,928 | WARNING | django.security.csrf | Forbidden (CSRF token from POST incorrect.): /board/edit/8/
-2024-12-18 16:55:39,014 | ERROR | django.request | Internal Server Error: /board/edit/8/
-2024-12-19 00:50:49,958 | INFO | django.utils.autoreload | L:\Python\UU-kurs\5_message_board\board_project\board\kandinsky.py changed, reloading.
-2024-12-19 00:50:50,425 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
+2025-01-07 19:52:35,501 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
+2025-01-07 19:53:33,298 | WARNING | django.request | Not Found: /media/images/kandinsky/2025_1/img_1735995774682399500.jpg
+2025-01-07 19:53:40,075 | WARNING | django.request | Not Found: /media/images/kandinsky/2025_1/img_1735995774682399500.jpg
+2025-01-07 20:45:48,145 | INFO | django.utils.autoreload | Watching for file changes with StatReloader
