@@ -79,13 +79,21 @@
 
 ## Для запуска:
 1. Установите все необходимые зависимости, выполнив команду:  
-`pip install -r requirements.txt`.
+```
+pip install -r requirements.txt
+```
 2. Укажите переменные окружения `API_KEY` и `SECRET_KEY` с ключами для API Kandynsky. 
 Для получения ключей нужно зарегистрироваться на [Fusion Brain](https://fusionbrain.ai/)   
 3. Для локального запуска:  
 - перейдите в каталог `board_project`, команда:  
-`cd .\board_project\`  
+```
+cd .\board_project\
+```  
 - запустите код с помощью команды:  
-`python manage.py runserver`  
+```
+python manage.py runserver
+```  
 4. Для запуска на сервере используйте команду:  
-`cd board_project && gunicorn board_project.wsgi:application  --bind 0.0.0.0:80`
+```
+cd board_project && gunicorn board_project.wsgi:application  --bind 0.0.0.0:80
+```
