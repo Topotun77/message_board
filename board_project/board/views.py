@@ -31,7 +31,7 @@ def logout_view(request: HttpRequest) -> HttpResponseRedirect:
     return redirect('login')
 
 
-def signup(request: HttpRequest) -> HttpResponseRedirect:
+def signup(request: HttpRequest):
     """
     Представление - Регистрация пользователя
     :param request: HttpRequest - запрос пользователя
@@ -49,7 +49,7 @@ def signup(request: HttpRequest) -> HttpResponseRedirect:
     return render(request, 'signup.html', {'form': form})
 
 
-def home(request: HttpRequest) -> HttpResponseRedirect:
+def home(request: HttpRequest):
     """
     Представление - Регистрация пользователя.
     :param request: HttpRequest - запрос пользователя.
@@ -58,7 +58,7 @@ def home(request: HttpRequest) -> HttpResponseRedirect:
     return render(request, 'home.html')
 
 
-def user_stat_list(request: HttpRequest) -> HttpResponseRedirect:
+def user_stat_list(request: HttpRequest):
     """
     Представление - Просмотр статистики по пользователям.
     :param request: HttpRequest - запрос пользователя.
@@ -68,7 +68,7 @@ def user_stat_list(request: HttpRequest) -> HttpResponseRedirect:
     return render(request, 'board/user_statistic_list.html', {'user_stat': user_stat})
 
 
-def user_settings(request: HttpRequest) -> HttpResponseRedirect:
+def user_settings(request: HttpRequest):
     """
     Изменить пользовательские настройки.
     :param request: HttpRequest - запрос пользователя.
@@ -94,7 +94,7 @@ def user_settings(request: HttpRequest) -> HttpResponseRedirect:
                   {'user_stat': user_stat, 'form': form})
 
 
-def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpResponseRedirect:
+def advertisement_list(request: HttpRequest, pk: int | None = None):
     """
     Представление - Просмотр списка объявлений.
     :param request: HttpRequest - запрос пользователя.
@@ -121,7 +121,7 @@ def advertisement_list(request: HttpRequest, pk: int | None = None) -> HttpRespo
     return render(request, 'board/advertisement_list.html', context)
 
 
-def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+def advertisement_detail(request: HttpRequest, pk: int):
     """
     Представление - Просмотр выбранного объявления.
     :param request: HttpRequest - запрос пользователя.
@@ -132,6 +132,8 @@ def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     images = Image.objects.filter(advertisement=advertisement.id)
     comments = Comment.objects.filter(advertisement=advertisement.id)
     context = like_read(request, pk)
+    if advertisement.author == request.user or request.user.is_superuser:
+        context['reload'] = '<div id="reload"></div>'
     return render(request, 'board/advertisement_detail.html',
                   {'advertisement': advertisement,
                    'images': images,
@@ -140,7 +142,7 @@ def advertisement_detail(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 
 
 @login_required
-def add_advertisement(request: HttpRequest) -> HttpResponseRedirect:
+def add_advertisement(request: HttpRequest):
     """
     Представление - Добавить новое объявление.
     :param request: HttpRequest - запрос пользователя.
@@ -159,7 +161,7 @@ def add_advertisement(request: HttpRequest) -> HttpResponseRedirect:
 
 
 @login_required
-def add_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+def add_comment(request: HttpRequest, pk: int):
     """
     Представление - Добавить новый комментарий.
     :param request: HttpRequest - запрос пользователя.
@@ -180,7 +182,7 @@ def add_comment(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 
 
 @login_required
-def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+def add_image(request: HttpRequest, pk: int):
     """
     Представление - Добавить новые картинки.
     :param request: HttpRequest - запрос пользователя.
@@ -200,7 +202,7 @@ def add_image(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 
 
 @login_required
-def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
+def edit_advertisement(request: HttpRequest, pk):
     """
     Представление - Редактирование выбранного объявления. Редактировать можно только
     свои объявления или суперпользователю можно редактировать все.
@@ -235,9 +237,9 @@ def edit_advertisement(request: HttpRequest, pk) -> HttpResponseRedirect:
                    'images': images})
 
 @login_required
-def edit_comment(request: HttpRequest, pk) -> HttpResponseRedirect:
+def edit_comment(request: HttpRequest, pk):
     """
-    Представление - Редактирование выбранного сомментария. Редактировать можно только
+    Представление - Редактирование выбранного комментария. Редактировать можно только
     свои комментарии или суперпользователю можно редактировать все.
     :param request: HttpRequest - запрос пользователя.
     :param pk: id комментария.
@@ -291,7 +293,7 @@ def image_generation(request: HttpRequest, pk) -> HttpResponse:
 
 
 @login_required
-def del_advertisement(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+def del_advertisement(request: HttpRequest, pk: int):
     """
     Представление - Удаление выбранного объявления. Удалять можно только свои объявления.
     :param request: HttpRequest - запрос пользователя.

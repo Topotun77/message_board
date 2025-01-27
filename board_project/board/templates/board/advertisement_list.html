@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div id="reload"></div>
 <h1>Объявления</h1>
 {% if user_show %} <h2>Все объявления пользователя: {{ user_show }} ({{ user_stat.advertisement_count }})</h2>
 {% endif %}

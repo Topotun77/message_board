@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{{ reload|safe }}
+
 <h1>{{ advertisement.title }}</h1>
 <h3>Автор:
     <a href="{% url 'board:advertisement_list' pk=advertisement.author.id %}">
