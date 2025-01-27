@@ -10,6 +10,7 @@
       <link rel="stylesheet" type="text/css" href='{% static "board_project/style-night.css" %}'>
     {% endif %}
     <link rel="icon" href="{% static 'favicon3.ico' %}" />
+    <script src="{% static 'reload.js' %}"></script>
 </head>
 <body>
     <div class="navbar">
@@ -42,19 +43,5 @@
     <br> Пишите нам на почту: ✉<a href="mailto:mail@mail.ru"> mail@mail.ru </a>
     <br>  <br>
 
-    <script>
-    function autoRefresh() {
-        const refreshElement = document.getElementById('reload');
-        if (refreshElement) {
-            setTimeout(() => {
-                location.reload(true);
-            }, 10000);
-            console.log("Страница обновляется...");
-        } else {
-            console.log("Элемент с id='reload' отсутствует.");
-        }
-    }
-    window.onload = autoRefresh;
-  </script>
 </body>
 </html>
