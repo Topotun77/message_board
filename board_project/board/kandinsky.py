@@ -59,7 +59,7 @@ class Text2ImageAPI:
         data = response.json()
         return data['uuid']
 
-    async def check_generation(self, request_id, attempts=10, delay=10):
+    async def check_generation(self, request_id, attempts=20, delay=10):
         """
         Проверка и ожидание готовности генерации
         :param request_id: id запроса
